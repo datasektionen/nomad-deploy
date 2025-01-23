@@ -17,6 +17,9 @@ inputs:
   image-tag:
     description: "The ghcr.io tag to release under (e.g., latest or preview)"
     default: "latest"
+  build-vars:
+    description: "String of environment variables to pass to build stage"
+    default: ""
   nomad-version:
     description: "Hashicorp Nomad version to download and use (leave default)"
     default: "1.7.7"
@@ -62,6 +65,7 @@ runs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
         platforms: linux/amd64,linux/arm64
+        build-args: ${{ inputs.build-vars }}
 
     - name: Deploy to Nomad
       shell: bash
