@@ -2,8 +2,14 @@ name: "Deploy Job to Nomad"
 author: "Konglig Datasektionen"
 description: "Deploys an application to Datasektionen's Nomad environment."
 inputs:
-  token:
+  github-token:
+    description: "Token to log into GitHub container registry with"
+    required: true
+  nomad-token:
     description: "Nomad Deploy token authorized to issue this deployment"
+    required: true
+  nomad-addr:
+    description: "Nomad server address at where to deploy the job"
     required: true
   job-file-path:
     description: "Path to file containing Nomad job spec for this application"
@@ -45,7 +51,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.github-token }}
 
     - name: Build and Push
       uses: docker/build-push-action@v5
@@ -58,7 +64,7 @@ runs:
     - name: Deploy to Nomad
       shell: bash
       env:
-        NOMAD_ADDR: ${{ vars.NOMAD_ADDR }} # org-level variable
-        NOMAD_TOKEN: ${{ inputs.token }}
+        NOMAD_ADDR: ${{ inputs.nomad-addr }}
+        NOMAD_TOKEN: ${{ inputs.nomad-token }}
       run: |
         nomad run -var=image_tag=${{ env.rev }} ${{ inputs.job-file-path }}
