@@ -28,11 +28,12 @@ runs:
 
     - name: Set environment variables
       shell: bash
+      env:
+        PKG_NAME: ghcr.io/${{ github.repository }}
       run: |
         cat >> "$GITHUB_ENV" <<EOF
-        pkg="ghcr.io/${{ github.repository}}"
-        rev="$pkg:$(git rev-parse --short ${{ github.sha }})"
-        release="$pkg:{{ inputs.image-tag }}"
+        rev="$PKG_NAME:$(git rev-parse --short ${{ github.sha }})"
+        release="$PKG_NAME:${{ inputs.image-tag }}"
         EOF
 
     - name: Download Nomad
