@@ -29,6 +29,12 @@ inputs:
   skip-deploy:
     description: "Whether to skip deploying the Nomad job (just build & push)"
     default: false
+  deploy-image-ref-var:
+    description: "Name for job variable with image ref when passing to Nomad"
+    default: "image_tag" # will be accessible from job.nomad.hcl
+  deploy-args:
+    description: "String of extra arguments to pass to `nomad run` command"
+    default: ""
   nomad-version:
     description: "Hashicorp Nomad version to download and use (leave default)"
     default: "1.7.7"
@@ -90,4 +96,4 @@ runs:
         NOMAD_ADDR: ${{ inputs.nomad-addr }}
         NOMAD_TOKEN: ${{ inputs.nomad-token }}
       run: |
-        nomad run -var=image_tag=${{ env.rev }} ${{ inputs.job-file-path }}
+        nomad run -var=${{ inputs.deploy-image-ref-var }}=${{ env.rev }} ${{ inputs.deploy-args }} "${{ inputs.job-file-path }}"
