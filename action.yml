@@ -20,6 +20,9 @@ inputs:
   build-vars:
     description: "String of environment variables to pass to build stage"
     default: ""
+  skip-deploy:
+    description: "Whether to skip deploying the Nomad job (just build & push)"
+    default: false
   nomad-version:
     description: "Hashicorp Nomad version to download and use (leave default)"
     default: "1.7.7"
@@ -68,6 +71,7 @@ runs:
         build-args: ${{ inputs.build-vars }}
 
     - name: Deploy to Nomad
+      if: ${{ ! inputs.skip-deploy }}
       shell: bash
       env:
         NOMAD_ADDR: ${{ inputs.nomad-addr }}
