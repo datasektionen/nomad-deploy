@@ -20,6 +20,12 @@ inputs:
   build-vars:
     description: "String of environment variables to pass to build stage"
     default: ""
+  build-context:
+    description: "Primary directory where the Dockerfile resides"
+    default: "."
+  build-dockerfile:
+    description: "Name of the Dockerfile within the context directory"
+    default: "Dockerfile"
   skip-deploy:
     description: "Whether to skip deploying the Nomad job (just build & push)"
     default: false
@@ -65,6 +71,8 @@ runs:
       with:
         push: true
         tags: ${{ env.rev }},${{ env.release }}
+        context: ${{ inputs.build-context }}
+        file: ${{ inputs.build-dockerfile }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         platforms: linux/amd64,linux/arm64
