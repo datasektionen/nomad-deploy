@@ -32,6 +32,10 @@ inputs:
   nomad-version:
     description: "Hashicorp Nomad version to download and use (leave default)"
     default: "1.7.7"
+outputs:
+  built-image-ref:
+    description: "Full Docker image reference (name:tag) as built and pushed"
+    value: ${{ env.rev }}
 runs:
   using: "composite"
   steps:
@@ -49,6 +53,7 @@ runs:
         EOF
 
     - name: Download Nomad
+      if: ${{ ! inputs.skip-deploy }}
       shell: bash
       env:
         NOMAD_VERSION: ${{ inputs.nomad-version }}
