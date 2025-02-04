@@ -12,3 +12,10 @@ assuming that it already has a `NOMAD_TOKEN` secret set for that repository
 the [infra](https://github.com/datasektionen/infra) repository).
 
 The action also assumes that a `NOMAD_ADDR` variable is set at the org level.
+
+When a more complex setup is required, the action strives to be very
+configurable (with sensible defaults) and so can often prove sufficiently
+extensible to accommodate more esoteric layouts. An example is provided in the
+`deploy-dual.example.yml` file in this repository, which shows how one can
+build and deploy a single job featuring two separate tasks (frontend and
+backend). Slight tweaks may be necessary when using it.
