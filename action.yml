@@ -37,7 +37,7 @@ inputs:
     default: ""
   nomad-version:
     description: "Hashicorp Nomad version to download and use (leave default)"
-    default: "1.7.7"
+    default: "1.8.4"
 outputs:
   built-image-ref:
     description: "Full Docker image reference (name:tag) as built and pushed"
