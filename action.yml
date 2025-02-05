@@ -28,7 +28,7 @@ inputs:
     default: "Dockerfile"
   skip-deploy:
     description: "Whether to skip deploying the Nomad job (just build & push)"
-    default: false
+    default: "false" # GitHub only supports string type, not booleans
   deploy-image-ref-var:
     description: "Name for job variable with image ref when passing to Nomad"
     default: "image_tag" # will be accessible from job.nomad.hcl
@@ -59,7 +59,7 @@ runs:
         EOF
 
     - name: Download Nomad
-      if: ${{ ! inputs.skip-deploy }}
+      if: ${{ inputs.skip-deploy != 'true' }}
       shell: bash
       env:
         NOMAD_VERSION: ${{ inputs.nomad-version }}
@@ -90,7 +90,7 @@ runs:
         build-args: ${{ inputs.build-vars }}
 
     - name: Deploy to Nomad
-      if: ${{ ! inputs.skip-deploy }}
+      if: ${{ inputs.skip-deploy != 'true' }}
       shell: bash
       env:
         NOMAD_ADDR: ${{ inputs.nomad-addr }}
