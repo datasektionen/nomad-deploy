@@ -44,14 +44,14 @@ inputs:
 outputs:
   built-image-ref:
     description: "Full Docker image reference (name:tag) as built and pushed"
-    value: ${{ env.rev }}
+    value: ${{ steps.set-outputs.outputs.built-image-ref }}
 runs:
   using: "composite"
   steps:
-    - name: Git checkout
+    - name: Git Checkout
       uses: actions/checkout@v4
 
-    - name: Set environment variables
+    - name: Set Environment Variables
       shell: bash
       env:
         PKG_NAME: ghcr.io/${{ github.repository }}
@@ -100,3 +100,8 @@ runs:
         NOMAD_TOKEN: ${{ inputs.nomad-token }}
       run: |
         nomad run -var=${{ inputs.deploy-image-ref-var }}=${{ env.rev }} ${{ inputs.deploy-args }} "${{ inputs.job-file-path }}"
+
+    - name: Set Outputs # seems like outputs.id.value can't access env directly
+      id: set-outputs
+      shell: bash
+      run: echo "built-image-ref=${{ env.rev }}" >> "$GITHUB_OUTPUT"
