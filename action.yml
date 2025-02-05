@@ -26,6 +26,9 @@ inputs:
   build-dockerfile:
     description: "Path to the Dockerfile relative to the repository root"
     default: "Dockerfile" # *not* relative to build context!
+  build-platforms:
+    description: "Comma-separated list of Docker platforms to build for"
+    default: "linux/amd64" # use "linux/amd64,linux/arm64" to support M1+ Macs
   skip-deploy:
     description: "Whether to skip deploying the Nomad job (just build & push)"
     default: "false" # GitHub only supports string type, not booleans
@@ -86,7 +89,7 @@ runs:
         file: ${{ inputs.build-dockerfile }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        platforms: linux/amd64,linux/arm64
+        platforms: ${{ inputs.build-platforms }}
         build-args: ${{ inputs.build-vars }}
 
     - name: Deploy to Nomad
