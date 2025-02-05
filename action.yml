@@ -24,8 +24,8 @@ inputs:
     description: "Primary directory where the Dockerfile resides"
     default: "."
   build-dockerfile:
-    description: "Name of the Dockerfile within the context directory"
-    default: "Dockerfile"
+    description: "Path to the Dockerfile relative to the repository root"
+    default: "Dockerfile" # *not* relative to build context!
   skip-deploy:
     description: "Whether to skip deploying the Nomad job (just build & push)"
     default: "false" # GitHub only supports string type, not booleans
