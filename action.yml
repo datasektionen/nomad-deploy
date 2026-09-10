@@ -31,7 +31,7 @@ inputs:
     default: "Dockerfile" # *not* relative to build context!
   build-platforms:
     description: "Comma-separated list of Docker platforms to build for"
-    default: "linux/amd64" # use "linux/amd64,linux/arm64" to support M1+ Macs
+    default: "linux/amd64,linux/arm64" # use "linux/amd64,linux/arm64" to support M1+ Macs
   skip-deploy:
     description: "Whether to skip deploying the Nomad job (just build & push)"
     default: "false" # GitHub only supports string type, not booleans
